@@ -17,7 +17,7 @@ namaste_service = NAMASTEService()
 async def lookup_namaste_code(
     code: str,
     current_user: dict = Depends(get_current_user)
-) -> NAMASTELookupResponse:
+):
     """
     Lookup NAMASTE code details
     
@@ -38,7 +38,7 @@ async def search_namaste_terms(
     system: Optional[str] = Query(None, description="Filter by system (ayurveda, siddha, unani)"),
     limit: int = Query(10, ge=1, le=100, description="Maximum number of results"),
     current_user: dict = Depends(get_current_user)
-) -> NAMASTESearchResponse:
+):
     """
     Search NAMASTE terminology
     
@@ -87,10 +87,10 @@ async def autocomplete_namaste_terms(
         # Convert to autocomplete format
         suggestions = [
             {
-                "code": result.code,
-                "term": result.term,
-                "system": result.system,
-                "display": f"{result.term} ({result.code}) - {result.system.title()}"
+                "code": result.get("code"),
+                "term": result.get("term"),
+                "system": result.get("system"),
+                "display": f"{result.get('term')} ({result.get('code')}) - {str(result.get('system')).title()}"
             }
             for result in search_result
         ]
@@ -135,7 +135,7 @@ async def get_all_namaste_codes(
     system: Optional[str] = Query(None, description="Filter by system"),
     limit: Optional[int] = Query(None, ge=1, le=1000, description="Limit number of results"),
     current_user: dict = Depends(get_current_user)
-) -> List[NAMASTECode]:
+):
     """
     Get all NAMASTE codes, optionally filtered by system
     

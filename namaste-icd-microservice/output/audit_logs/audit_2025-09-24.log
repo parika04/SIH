@@ -1,0 +1,1 @@
+{"type": "error", "path": "/api/v1/terminology/search", "method": "GET", "error_code": 403, "error_message": "403: Not authenticated", "timestamp": "2025-09-24T01:30:42.623845"}
