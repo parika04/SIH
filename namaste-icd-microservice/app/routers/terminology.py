@@ -4,7 +4,7 @@ from typing import List, Optional
 import logging
 
 from app.services.namaste_service import NAMASTEService
-# Note: Pydantic response models omitted due to missing definitions; returning dicts.
+# Using dataclasses for response models; returning dicts for API responses.
 from app.auth.oauth2 import get_current_user
 
 logger = logging.getLogger(__name__)

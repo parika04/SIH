@@ -15,11 +15,11 @@ router = APIRouter()
 namaste_service = NAMASTEService()
 icd_service = ICDService()
 
-@router.get("/namaste-to-icd/{namaste_code}", response_model=ICDMappingResponse)
+@router.get("/namaste-to-icd/{namaste_code}")
 async def map_namaste_to_icd(
     namaste_code: str,
     current_user: dict = Depends(get_current_user)
-) -> ICDMappingResponse:
+):
     """
     Map NAMASTE code to ICD-11 (TM2 + Biomedicine) codes
     

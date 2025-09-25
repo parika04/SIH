@@ -25,8 +25,8 @@ app = FastAPI(
     title=settings.app_name,
     description="FHIR R4-compliant terminology microservice for NAMASTE-ICD-11 integration",
     version=settings.version,
-    docs_url="/docs" if settings.debug else None,
-    redoc_url="/redoc" if settings.debug else None,
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
 # CORS middleware
