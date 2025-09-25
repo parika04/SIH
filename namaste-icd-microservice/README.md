@@ -45,7 +45,7 @@ Into FHIR R4-compliant EMR systems following India's 2016 EHR Standards.
 namaste-icd-microservice/
 ├── app/
 │   ├── auth/           # OAuth2 + ABHA authentication
-│   ├── models/         # Pydantic models for all resources
+│   ├── models/         # Data models for all resources
 │   ├── routers/        # FastAPI endpoint definitions
 │   ├── services/       # Core business logic
 │   └── utils/          # Helper functions and validators

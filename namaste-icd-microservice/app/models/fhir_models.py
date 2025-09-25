@@ -1,156 +1,201 @@
 from typing import Dict, List, Optional, Any
-from pydantic import BaseModel
 from datetime import datetime
 
-# FHIR R4 Models for NAMASTE-ICD Integration
+# FHIR R4 Helper Functions for NAMASTE-ICD Integration
 
-class FHIRCoding(BaseModel):
-    system: str
-    code: str
-    display: str
-    version: Optional[str] = None
+def create_fhir_coding(system: str, code: str, display: str, version: Optional[str] = None) -> Dict[str, Any]:
+    """Create a FHIR Coding object"""
+    coding = {
+        "system": system,
+        "code": code,
+        "display": display
+    }
+    if version:
+        coding["version"] = version
+    return coding
 
-class FHIRIdentifier(BaseModel):
-    use: Optional[str] = None
-    type: Optional[Dict] = None
-    system: str
-    value: str
+def create_fhir_identifier(use: Optional[str], system: str, value: str, type_dict: Optional[Dict] = None) -> Dict[str, Any]:
+    """Create a FHIR Identifier object"""
+    identifier = {
+        "system": system,
+        "value": value
+    }
+    if use:
+        identifier["use"] = use
+    if type_dict:
+        identifier["type"] = type_dict
+    return identifier
 
-class FHIRMeta(BaseModel):
-    versionId: Optional[str] = None
-    lastUpdated: Optional[str] = None
-    source: Optional[str] = None
-    profile: Optional[List[str]] = []
-    security: Optional[List[FHIRCoding]] = []
-    tag: Optional[List[FHIRCoding]] = []
+def create_fhir_meta(version_id: Optional[str] = None, last_updated: Optional[str] = None, 
+                    source: Optional[str] = None, profile: Optional[List[str]] = None,
+                    security: Optional[List[Dict]] = None, tag: Optional[List[Dict]] = None) -> Dict[str, Any]:
+    """Create a FHIR Meta object"""
+    meta = {}
+    if version_id:
+        meta["versionId"] = version_id
+    if last_updated:
+        meta["lastUpdated"] = last_updated
+    if source:
+        meta["source"] = source
+    if profile:
+        meta["profile"] = profile
+    if security:
+        meta["security"] = security
+    if tag:
+        meta["tag"] = tag
+    return meta
 
-class FHIRCodeSystemConcept(BaseModel):
-    code: str
-    display: str
-    definition: Optional[str] = None
-    property: Optional[List[Dict]] = []
-    concept: Optional[List["FHIRCodeSystemConcept"]] = []
+def create_fhir_codesystem(id: str, url: str, version: str, name: str, title: str, 
+                          description: str, date: str, concept: List[Dict],
+                          meta: Optional[Dict] = None, identifier: Optional[List[Dict]] = None,
+                          publisher: str = "Ministry of AYUSH, India") -> Dict[str, Any]:
+    """Create a FHIR CodeSystem object"""
+    codesystem = {
+        "resourceType": "CodeSystem",
+        "id": id,
+        "url": url,
+        "version": version,
+        "name": name,
+        "title": title,
+        "status": "active",
+        "experimental": False,
+        "date": date,
+        "publisher": publisher,
+        "description": description,
+        "caseSensitive": True,
+        "hierarchyMeaning": "is-a",
+        "compositional": False,
+        "versionNeeded": False,
+        "content": "complete",
+        "concept": concept
+    }
+    if meta:
+        codesystem["meta"] = meta
+    if identifier:
+        codesystem["identifier"] = identifier
+    return codesystem
 
-class FHIRCodeSystem(BaseModel):
-    resourceType: str = "CodeSystem"
-    id: str
-    meta: Optional[FHIRMeta] = None
-    url: str
-    identifier: Optional[List[FHIRIdentifier]] = []
-    version: str
-    name: str
-    title: str
-    status: str = "active"
-    experimental: bool = False
-    date: str
-    publisher: str = "Ministry of AYUSH, India"
-    contact: Optional[List[Dict]] = []
-    description: str
-    jurisdiction: Optional[List[Dict]] = []
-    purpose: Optional[str] = None
-    copyright: Optional[str] = None
-    caseSensitive: bool = True
-    valueSet: Optional[str] = None
-    hierarchyMeaning: str = "is-a"
-    compositional: bool = False
-    versionNeeded: bool = False
-    content: str = "complete"
-    supplements: Optional[str] = None
-    count: Optional[int] = None
-    filter: Optional[List[Dict]] = []
-    property: Optional[List[Dict]] = []
-    concept: List[FHIRCodeSystemConcept]
+def create_fhir_conceptmap(id: str, url: str, version: str, name: str, title: str,
+                          description: str, date: str, group: List[Dict],
+                          meta: Optional[Dict] = None, identifier: Optional[List[Dict]] = None,
+                          publisher: str = "Ministry of AYUSH, India") -> Dict[str, Any]:
+    """Create a FHIR ConceptMap object"""
+    conceptmap = {
+        "resourceType": "ConceptMap",
+        "id": id,
+        "url": url,
+        "version": version,
+        "name": name,
+        "title": title,
+        "status": "active",
+        "experimental": False,
+        "date": date,
+        "publisher": publisher,
+        "description": description,
+        "group": group
+    }
+    if meta:
+        conceptmap["meta"] = meta
+    if identifier:
+        conceptmap["identifier"] = identifier
+    return conceptmap
 
-class FHIRConceptMapElement(BaseModel):
-    code: str
-    display: Optional[str] = None
-    target: List[Dict]  # Contains code, display, equivalence, etc.
+def create_fhir_valueset(id: str, url: str, version: str, name: str, title: str,
+                        description: str, date: str, compose: Dict,
+                        meta: Optional[Dict] = None, identifier: Optional[List[Dict]] = None,
+                        publisher: str = "Ministry of AYUSH, India") -> Dict[str, Any]:
+    """Create a FHIR ValueSet object"""
+    valueset = {
+        "resourceType": "ValueSet",
+        "id": id,
+        "url": url,
+        "version": version,
+        "name": name,
+        "title": title,
+        "status": "active",
+        "experimental": False,
+        "date": date,
+        "publisher": publisher,
+        "description": description,
+        "compose": compose
+    }
+    if meta:
+        valueset["meta"] = meta
+    if identifier:
+        valueset["identifier"] = identifier
+    return valueset
 
-class FHIRConceptMapGroup(BaseModel):
-    source: str
-    sourceVersion: Optional[str] = None
-    target: str
-    targetVersion: Optional[str] = None
-    element: List[FHIRConceptMapElement]
+def create_fhir_condition(id: str, clinical_status: Dict, code: Dict, subject: Dict,
+                         verification_status: Optional[Dict] = None, category: Optional[List[Dict]] = None,
+                         severity: Optional[Dict] = None, body_site: Optional[List[Dict]] = None,
+                         encounter: Optional[Dict] = None, onset_date_time: Optional[str] = None,
+                         recorded_date: Optional[str] = None, recorder: Optional[Dict] = None,
+                         evidence: Optional[List[Dict]] = None, note: Optional[List[Dict]] = None,
+                         meta: Optional[Dict] = None, identifier: Optional[List[Dict]] = None) -> Dict[str, Any]:
+    """Create a FHIR Condition object"""
+    condition = {
+        "resourceType": "Condition",
+        "id": id,
+        "clinicalStatus": clinical_status,
+        "code": code,
+        "subject": subject
+    }
+    if meta:
+        condition["meta"] = meta
+    if identifier:
+        condition["identifier"] = identifier
+    if verification_status:
+        condition["verificationStatus"] = verification_status
+    if category:
+        condition["category"] = category
+    if severity:
+        condition["severity"] = severity
+    if body_site:
+        condition["bodySite"] = body_site
+    if encounter:
+        condition["encounter"] = encounter
+    if onset_date_time:
+        condition["onsetDateTime"] = onset_date_time
+    if recorded_date:
+        condition["recordedDate"] = recorded_date
+    if recorder:
+        condition["recorder"] = recorder
+    if evidence:
+        condition["evidence"] = evidence
+    if note:
+        condition["note"] = note
+    return condition
 
-class FHIRConceptMap(BaseModel):
-    resourceType: str = "ConceptMap"
-    id: str
-    meta: Optional[FHIRMeta] = None
-    url: str
-    identifier: Optional[List[FHIRIdentifier]] = []
-    version: str
-    name: str
-    title: str
-    status: str = "active"
-    experimental: bool = False
-    date: str
-    publisher: str = "Ministry of AYUSH, India"
-    contact: Optional[List[Dict]] = []
-    description: str
-    jurisdiction: Optional[List[Dict]] = []
-    purpose: Optional[str] = None
-    copyright: Optional[str] = None
-    sourceUri: Optional[str] = None
-    targetUri: Optional[str] = None
-    group: List[FHIRConceptMapGroup]
+def create_fhir_bundle(id: str, type: str, entry: List[Dict], identifier: Optional[Dict] = None,
+                      timestamp: Optional[str] = None, total: Optional[int] = None,
+                      link: Optional[List[Dict]] = None, meta: Optional[Dict] = None) -> Dict[str, Any]:
+    """Create a FHIR Bundle object"""
+    bundle = {
+        "resourceType": "Bundle",
+        "id": id,
+        "type": type,
+        "entry": entry
+    }
+    if meta:
+        bundle["meta"] = meta
+    if identifier:
+        bundle["identifier"] = identifier
+    if timestamp:
+        bundle["timestamp"] = timestamp
+    if total:
+        bundle["total"] = total
+    if link:
+        bundle["link"] = link
+    return bundle
 
-class FHIRValueSet(BaseModel):
-    resourceType: str = "ValueSet"
-    id: str
-    meta: Optional[FHIRMeta] = None
-    url: str
-    identifier: Optional[List[FHIRIdentifier]] = []
-    version: str
-    name: str
-    title: str
-    status: str = "active"
-    experimental: bool = False
-    date: str
-    publisher: str = "Ministry of AYUSH, India"
-    contact: Optional[List[Dict]] = []
-    description: str
-    jurisdiction: Optional[List[Dict]] = []
-    purpose: Optional[str] = None
-    copyright: Optional[str] = None
-    compose: Dict
-    expansion: Optional[Dict] = None
-
-class FHIRCondition(BaseModel):
-    resourceType: str = "Condition"
-    id: str
-    meta: Optional[FHIRMeta] = None
-    identifier: Optional[List[FHIRIdentifier]] = []
-    clinicalStatus: FHIRCoding
-    verificationStatus: Optional[FHIRCoding] = None
-    category: Optional[List[FHIRCoding]] = []
-    severity: Optional[FHIRCoding] = None
-    code: FHIRCoding  # NAMASTE code
-    bodySite: Optional[List[FHIRCoding]] = []
-    subject: Dict  # Patient reference
-    encounter: Optional[Dict] = None  # Encounter reference
-    onsetDateTime: Optional[str] = None
-    recordedDate: Optional[str] = None
-    recorder: Optional[Dict] = None  # Practitioner reference
-    evidence: Optional[List[Dict]] = []
-    note: Optional[List[Dict]] = []
-
-class FHIRBundle(BaseModel):
-    resourceType: str = "Bundle"
-    id: str
-    meta: Optional[FHIRMeta] = None
-    identifier: Optional[FHIRIdentifier] = None
-    type: str  # collection, searchset, history, etc.
-    timestamp: Optional[str] = None
-    total: Optional[int] = None
-    link: Optional[List[Dict]] = []
-    entry: List[Dict]  # Bundle entries
-
-class FHIROperationOutcome(BaseModel):
-    resourceType: str = "OperationOutcome"
-    id: Optional[str] = None
-    meta: Optional[FHIRMeta] = None
-    issue: List[Dict]
-
-# Update forward references
-FHIRCodeSystemConcept.model_rebuild()
+def create_fhir_operation_outcome(issue: List[Dict], id: Optional[str] = None, meta: Optional[Dict] = None) -> Dict[str, Any]:
+    """Create a FHIR OperationOutcome object"""
+    outcome = {
+        "resourceType": "OperationOutcome",
+        "issue": issue
+    }
+    if id:
+        outcome["id"] = id
+    if meta:
+        outcome["meta"] = meta
+    return outcome

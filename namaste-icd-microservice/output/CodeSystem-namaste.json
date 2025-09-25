@@ -1,0 +1,19 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "namaste-codesystem",
+  "url": "http://localhost:8000/CodeSystem/namaste",
+  "version": "1.0.0",
+  "name": "NAMASTECodeSystem",
+  "title": "NAMASTE AYUSH Terminology",
+  "status": "active",
+  "experimental": false,
+  "date": "2025-09-25T04:58:42.472435",
+  "publisher": "Ministry of AYUSH, India",
+  "description": "AYUSH NAMASTE code system (Ayurveda, Siddha, Unani)",
+  "caseSensitive": true,
+  "hierarchyMeaning": "is-a",
+  "compositional": false,
+  "versionNeeded": false,
+  "content": "complete",
+  "concept": []
+}

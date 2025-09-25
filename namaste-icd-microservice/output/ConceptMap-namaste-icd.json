@@ -1,0 +1,14 @@
+{
+  "resourceType": "ConceptMap",
+  "id": "namaste-icd-mapping",
+  "url": "http://localhost:8000/ConceptMap/namaste-icd",
+  "version": "1.0.0",
+  "name": "NAMASTEtoICD",
+  "title": "NAMASTE to ICD-11 Mapping",
+  "status": "active",
+  "experimental": false,
+  "date": "2025-09-25T04:58:42.474195",
+  "publisher": "Ministry of AYUSH, India",
+  "description": "Mapping between AYUSH NAMASTE codes and ICD-11 codes",
+  "group": []
+}
